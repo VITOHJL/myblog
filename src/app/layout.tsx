@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import bbImage from "../bb.png";
 import TopNav from "./components/top-nav";
 import "./globals.css";
 
@@ -29,6 +30,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} relative overflow-hidden bg-white antialiased`}
       >
         <div aria-hidden className="global-ambient" />
+        <div
+          aria-hidden
+          className="global-paper"
+          style={{ backgroundImage: `url(${bbImage.src})` }}
+        />
         <header className="fixed inset-x-0 top-0 z-30 border-b border-slate-200/60 bg-white/80 backdrop-blur-sm">
           <nav className="flex h-16 w-full items-center justify-between px-6 sm:px-8 lg:px-12">
             <div className="flex items-center gap-2">

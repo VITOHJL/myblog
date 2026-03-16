@@ -34,14 +34,25 @@ body {
   border-radius: 9999px;
   background: radial-gradient(
     circle at 36% 36%,
-    rgba(191, 219, 254, 0.48) 0%,
-    rgba(221, 214, 254, 0.26) 38%,
-    rgba(186, 230, 253, 0.2) 74%
+    rgba(191, 219, 254, 0.42) 0%,
+    rgba(221, 214, 254, 0.18) 38%,
+    rgba(186, 253, 211, 0.1) 74%
   );
   filter: blur(56px);
-  opacity: 0.7;
+  opacity: 0.8; 
   will-change: transform;
-  animation: ambient-orb 26s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  animation: ambient-orb 16s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+.global-paper {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: 0.9;
 }
 
 .fullpage-scroll {
