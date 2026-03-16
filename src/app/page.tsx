@@ -25,7 +25,7 @@ function SectionFrame({
   children: React.ReactNode;
 }) {
   return (
-    <section id={id} className="h-full w-full snap-start snap-always bg-white">
+    <section id={id} className="h-full w-full snap-start snap-always bg-transparent">
       <div className="flex h-full w-full">
         <div className="hidden w-1/4 flex-shrink-0 pt-[12vh] md:block">
           <div
@@ -36,7 +36,9 @@ function SectionFrame({
             }}
           />
         </div>
-        <div className="w-full flex-shrink-0 px-6 sm:px-8 md:w-2/4 lg:px-10">{children}</div>
+        <div className="w-full flex-shrink-0 px-8 sm:px-12 md:w-2/4 lg:px-20">
+          <div className="mx-auto h-full max-w-3xl">{children}</div>
+        </div>
         <div className="hidden w-1/4 flex-shrink-0 md:block" />
       </div>
     </section>
@@ -125,20 +127,14 @@ export default function Home() {
   );
 
   const getParallaxLayerClass = useCallback(
-    (index: number, layer: "content" | "bg") => {
+    (index: number) => {
       if (!hasPageTransition || activeIndex !== index) {
         return "";
       }
 
-      if (motionDirection === 1) {
-        return layer === "content"
-          ? "section-content-enter-up"
-          : "section-bg-enter-up";
-      }
-
-      return layer === "content"
-        ? "section-content-enter-down"
-        : "section-bg-enter-down";
+      return motionDirection === 1
+        ? "section-content-enter-up"
+        : "section-content-enter-down";
     },
     [activeIndex, hasPageTransition, motionDirection],
   );
@@ -237,11 +233,8 @@ export default function Home() {
     >
       <SectionFrame id="home">
         <div className="relative h-full">
-          <div
-            className={`pointer-events-none absolute inset-x-0 top-0 h-80 bg-[radial-gradient(circle_at_top,_rgba(191,219,254,0.25)_0,_rgba(221,214,254,0.22)_45%,_transparent_72%)] ${getParallaxLayerClass(0, "bg")}`}
-          />
           <main
-            className={`relative z-10 flex h-full flex-col justify-center gap-8 ${getParallaxLayerClass(0, "content")}`}
+            className={`relative z-10 flex h-full flex-col justify-center gap-8 ${getParallaxLayerClass(0)}`}
           >
             <div className="space-y-3">
               <p className="text-xs font-medium tracking-[0.2em] text-slate-500">HOME</p>
@@ -268,11 +261,8 @@ export default function Home() {
 
       <SectionFrame id="works">
         <div className="relative h-full">
-          <div
-            className={`pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(circle_at_top,_rgba(186,230,253,0.2)_0,_rgba(224,231,255,0.2)_42%,_transparent_72%)] ${getParallaxLayerClass(1, "bg")}`}
-          />
           <main
-            className={`relative z-10 flex h-full flex-col justify-center gap-8 ${getParallaxLayerClass(1, "content")}`}
+            className={`relative z-10 flex h-full flex-col justify-center gap-8 ${getParallaxLayerClass(1)}`}
           >
             <div className="flex items-center gap-4">
               <h2 className="text-xl font-semibold tracking-[0.1em] text-slate-800">作品</h2>
@@ -301,11 +291,8 @@ export default function Home() {
 
       <SectionFrame id="about-page">
         <div className="relative h-full">
-          <div
-            className={`pointer-events-none absolute inset-x-0 top-0 h-96 bg-[radial-gradient(circle_at_top,_rgba(191,219,254,0.25)_0,_rgba(221,214,254,0.2)_40%,_transparent_70%)] ${getParallaxLayerClass(2, "bg")}`}
-          />
           <main
-            className={`relative z-10 flex h-full w-full flex-col justify-center gap-16 py-8 ${getParallaxLayerClass(2, "content")}`}
+            className={`relative z-10 flex h-full w-full flex-col justify-center gap-16 py-8 ${getParallaxLayerClass(2)}`}
           >
             <section id="vision" className="space-y-6">
               <div className="flex items-center gap-4">
@@ -381,11 +368,8 @@ export default function Home() {
 
       <SectionFrame id="notes">
         <div className="relative h-full">
-          <div
-            className={`pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(circle_at_top,_rgba(254,226,226,0.2)_0,_rgba(254,240,138,0.16)_42%,_transparent_72%)] ${getParallaxLayerClass(3, "bg")}`}
-          />
           <main
-            className={`relative z-10 flex h-full flex-col justify-center gap-8 ${getParallaxLayerClass(3, "content")}`}
+            className={`relative z-10 flex h-full flex-col justify-center gap-8 ${getParallaxLayerClass(3)}`}
           >
             <div className="flex items-center gap-4">
               <h2 className="text-xl font-semibold tracking-[0.1em] text-slate-800">随笔</h2>

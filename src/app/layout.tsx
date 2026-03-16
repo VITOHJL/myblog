@@ -26,8 +26,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} overflow-hidden bg-white antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} relative overflow-hidden bg-white antialiased`}
       >
+        <div aria-hidden className="global-ambient" />
         <header className="fixed inset-x-0 top-0 z-30 border-b border-slate-200/60 bg-white/80 backdrop-blur-sm">
           <nav className="flex h-16 w-full items-center justify-between px-6 sm:px-8 lg:px-12">
             <div className="flex items-center gap-2">
@@ -39,7 +40,7 @@ export default function RootLayout({
             <TopNav />
           </nav>
         </header>
-        <main className="h-screen pt-16">{children}</main>
+        <main className="relative z-10 h-screen pt-16">{children}</main>
       </body>
     </html>
   );
