@@ -80,6 +80,31 @@ export default function Home() {
     return clampIndex(Math.round(container.scrollTop / container.clientHeight));
   }, []);
 
+  const emitSectionChange = useCallback((index: number) => {
+    const id = SECTION_IDS[index];
+    const targetHash = `#${id}`;
+
+    if (window.location.hash !== targetHash) {
+      window.history.replaceState(null, "", targetHash);
+    }
+
+    window.dispatchEvent(new CustomEvent("sectionchange", { detail: { id } }));
+  }, []);
+
+  const scrollToHash = useCallback(
+    (hash: string, behavior: ScrollBehavior = "smooth") => {
+      const target = hash.replace("#", "");
+      const targetIndex = SECTION_IDS.findIndex((id) => id === target);
+
+      if (targetIndex < 0) {
+        return;
+      }
+
+      scrollToIndex(targetIndex, behavior);
+    },
+    [scrollToIndex],
+  );
+
   const scrollByDirection = useCallback(
     (direction: 1 | -1) => {
       const currentIndex = getCurrentIndex();
@@ -97,20 +122,6 @@ export default function Home() {
       }, SCROLL_LOCK_MS);
     },
     [getCurrentIndex, scrollToIndex],
-  );
-
-  const scrollToHash = useCallback(
-    (hash: string, behavior: ScrollBehavior = "smooth") => {
-      const target = hash.replace("#", "");
-      const targetIndex = SECTION_IDS.findIndex((id) => id === target);
-
-      if (targetIndex < 0) {
-        return;
-      }
-
-      scrollToIndex(targetIndex, behavior);
-    },
-    [scrollToIndex],
   );
 
   const getParallaxLayerClass = useCallback(
@@ -164,12 +175,7 @@ export default function Home() {
     const initialIndex = getIndexFromHash(initialHash);
     previousIndexRef.current = initialIndex;
     lastReportedIndexRef.current = initialIndex;
-
-    const initialId = SECTION_IDS[initialIndex];
-    window.dispatchEvent(
-      new CustomEvent("sectionchange", { detail: { id: initialId } }),
-    );
-
+    emitSectionChange(initialIndex);
     scrollToHash(initialHash, "auto");
 
     const handleHashChange = () => {
@@ -181,7 +187,7 @@ export default function Home() {
     return () => {
       window.removeEventListener("hashchange", handleHashChange);
     };
-  }, [scrollToHash]);
+  }, [emitSectionChange, scrollToHash]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -191,17 +197,9 @@ export default function Home() {
 
     const onScroll = () => {
       const currentIndex = getCurrentIndex();
-      const currentId = SECTION_IDS[currentIndex];
-      const targetHash = `#${currentId}`;
 
       if (currentIndex !== lastReportedIndexRef.current) {
-        if (window.location.hash !== targetHash) {
-          window.history.replaceState(null, "", targetHash);
-        }
-
-        window.dispatchEvent(
-          new CustomEvent("sectionchange", { detail: { id: currentId } }),
-        );
+        emitSectionChange(currentIndex);
         lastReportedIndexRef.current = currentIndex;
       }
 
@@ -218,7 +216,7 @@ export default function Home() {
     return () => {
       container.removeEventListener("scroll", onScroll);
     };
-  }, [getCurrentIndex]);
+  }, [emitSectionChange, getCurrentIndex]);
 
   useEffect(() => {
     const onResize = () => {
@@ -306,7 +304,6 @@ export default function Home() {
           <div
             className={`pointer-events-none absolute inset-x-0 top-0 h-96 bg-[radial-gradient(circle_at_top,_rgba(191,219,254,0.25)_0,_rgba(221,214,254,0.2)_40%,_transparent_70%)] ${getParallaxLayerClass(2, "bg")}`}
           />
-
           <main
             className={`relative z-10 flex h-full w-full flex-col justify-center gap-16 py-8 ${getParallaxLayerClass(2, "content")}`}
           >
