@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f5f5fb;
+  --foreground: #020617;
 }
 
 @theme inline {
@@ -12,15 +12,79 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+body {
+  @apply bg-white text-[color:var(--foreground)] antialiased;
+}
+
+.fullpage-scroll {
+  scrollbar-width: none;
+}
+
+.fullpage-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.section-bg-enter-up {
+  animation: section-bg-enter-up 420ms cubic-bezier(0.55, 0, 0.45, 1) both;
+}
+
+.section-bg-enter-down {
+  animation: section-bg-enter-down 420ms cubic-bezier(0.55, 0, 0.45, 1) both;
+}
+
+.section-content-enter-up {
+  animation: section-content-enter-up 760ms cubic-bezier(0.45, 0.6, 0.85, 1) both;
+}
+
+.section-content-enter-down {
+  animation: section-content-enter-down 760ms cubic-bezier(0.45, 0.6, 0.85, 1) both;
+}
+
+@keyframes section-bg-enter-up {
+  0% {
+    transform: translateY(12px);
+  }
+  100% {
+    transform: translateY(0);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes section-bg-enter-down {
+  0% {
+    transform: translateY(-12px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes section-content-enter-up {
+  0% {
+    opacity: 0.94;
+    transform: translateY(150px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes section-content-enter-down {
+  0% {
+    opacity: 0.94;
+    transform: translateY(-150px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gradient-move {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: -200% 50%;
+  }
 }
