@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 const NAV_ITEMS = [
-  { href: "#home", label: "首页", id: "home" },
-  { href: "#works", label: "作品", id: "works" },
-  { href: "#about-page", label: "了解我", id: "about-page" },
-  { href: "#notes", label: "随笔", id: "notes" },
+  { href: "/#home", label: "首页", id: "home" },
+  { href: "/#works", label: "作品", id: "works" },
+  { href: "/#about-page", label: "了解我", id: "about-page" },
+  { href: "/#notes", label: "随笔", id: "notes" },
 ] as const;
 
 function normalizeHash(hash: string) {
@@ -14,9 +15,15 @@ function normalizeHash(hash: string) {
 }
 
 export default function TopNav() {
+  const pathname = usePathname();
   const [activeId, setActiveId] = useState("home");
+  const resolvedActiveId = pathname.startsWith("/notes") ? "notes" : activeId;
 
   useEffect(() => {
+    if (pathname !== "/") {
+      return;
+    }
+
     const updateActiveFromHash = () => {
       setActiveId(normalizeHash(window.location.hash));
     };
@@ -38,12 +45,12 @@ export default function TopNav() {
       window.removeEventListener("hashchange", updateActiveFromHash);
       window.removeEventListener("sectionchange", updateActiveFromSection);
     };
-  }, []);
+  }, [pathname]);
 
   return (
     <div className="flex flex-1 items-center justify-end gap-20 text-sm font-medium text-slate-500">
       {NAV_ITEMS.map((item) => {
-        const isActive = activeId === item.id;
+        const isActive = resolvedActiveId === item.id;
         return (
           <a
             key={item.id}
