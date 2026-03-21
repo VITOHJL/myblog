@@ -11,12 +11,11 @@ export function NotesFeatureCard({ selectedPost }: NotesFeatureCardProps) {
   const fallbackImage = "/shanghaitech.png";
 
   const selectedPostVisualClass = "";
+  const coverUrl = selectedPost.coverImage ?? fallbackImage;
 
-  const selectedPostVisualStyle: CSSProperties = {
-    backgroundImage: `url(${selectedPost.coverImage ?? fallbackImage})`,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-  };
+  const [year, month, day] = selectedPost.date.split("-");
+  const dateYear = year ?? "";
+  const dateMd = month && day ? `${month}/${day}` : "";
 
   return (
     <a
@@ -25,8 +24,11 @@ export function NotesFeatureCard({ selectedPost }: NotesFeatureCardProps) {
       className="group relative block h-full"
     >
       <div className="grid h-full grid-cols-1 gap-8 md:grid-cols-[minmax(0,1fr)_70%]">
-        <div className="flex min-h-0 flex-col justify-start gap-20 pb-4 pt-20">
-          <p className="text-4xl tracking-[0.16em] text-slate-500">{formatDateLabel(selectedPost.date)}</p>
+        <div className="flex min-h-0 flex-col justify-start gap-10 pb-4 pt-10">
+          <div className="text-slate-500">
+            <p className="text-6xl tracking-[0.16em]">{dateYear}</p>  
+            <p className="mt-2 text-2xl tracking-[0.22em]">{dateMd}</p>
+          </div>
           <div className="space-y-4 pb-1">
             <h3 className="max-w-xl text-3xl font-semibold leading-tight text-slate-900 transition group-hover:text-sky-700 sm:text-4xl">
               {selectedPost.title}
@@ -43,10 +45,10 @@ export function NotesFeatureCard({ selectedPost }: NotesFeatureCardProps) {
         <div className="relative min-h-[240px] md:min-h-0">
           {/* 背后的正方形图片 */}
           <div
-            className="absolute top-0 left-[20%] h-[65%] aspect-square overflow-hidden rounded-2xl opacity-50 shadow-[0_16px_32px_-18px_rgba(15,23,42,0.5)] z-0"
+            className="float-roll absolute top-0 left-[20%] h-[70%] aspect-square overflow-hidden rounded-2xl opacity-50 shadow-[0_16px_32px_-18px_rgba(15,23,42,0.5)] z-0"
             style={{
               // 使用与主卡片相同的图片源，自动裁剪为正方形
-              backgroundImage: `url(${selectedPost.coverImage ?? fallbackImage})`,
+              backgroundImage: `url(${coverUrl})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
@@ -70,10 +72,17 @@ export function NotesFeatureCard({ selectedPost }: NotesFeatureCardProps) {
             style={selectedPostVisualStyle}
           /> */}
           <div
-            className={`absolute top-[20%] bottom-[45%] right-[20%] w-[80%] overflow-hidden rounded-2xl shadow-[0_18px_38px_-20px_rgba(15,23,42,0.45)] transition group-hover:translate-y-[-2px] ${selectedPostVisualClass}`}
-            style={selectedPostVisualStyle}
+            className={`float-roll absolute top-[20%] bottom-[40%] right-[20%] w-[80%] overflow-hidden rounded-2xl shadow-[0_18px_38px_-20px_rgba(15,23,42,0.45)] transform transition-transform duration-520 ease-[cubic-bezier(0.18,0.72,0.18,1)] group-hover:translate-y-[-2px] group-hover:scale-[1.03] ${selectedPostVisualClass}`}
           >
-            {/* 主卡片：保持图片完全不透明，不再叠加半透明遮罩 */}
+            {/* 内部图片：默认略放大，悬停时略缩小，配合外框放大形成“剪裁展开”的感觉 */}
+            <div className="relative h-full w-full">
+              <div
+                className="absolute inset-0 bg-cover bg-center transform scale-[1.36] transition-transform duration-520 ease-[cubic-bezier(0.18,0.72,0.18,1)] group-hover:scale-100"
+                style={{
+                  backgroundImage: `url(${coverUrl})`,
+                }}
+              />
+            </div>
           </div>
         </div>
       </div>

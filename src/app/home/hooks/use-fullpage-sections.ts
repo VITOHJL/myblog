@@ -134,6 +134,7 @@ export function useFullpageSections({
           notesList.scrollTop + notesList.clientHeight < notesList.scrollHeight - 1;
         const canScrollUp = event.deltaY < 0 && notesList.scrollTop > 0;
 
+        // 左栏列表还没到底/到顶：优先滚列表，不触发翻页
         if (canScrollDown || canScrollUp) {
           return;
         }

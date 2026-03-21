@@ -50,8 +50,13 @@ describe("notes model", () => {
     expect(items).toEqual([
       { label: "全部", count: 3 },
       { label: "技术", count: 1 },
-      { label: "情感", count: 1 },
+      { label: "工程", count: 0 },
+      { label: "设计", count: 0 },
+      { label: "产品", count: 0 },
+      { label: "读书", count: 0 },
       { label: "随想", count: 1 },
+      { label: "情感", count: 1 },
+      { label: "生活", count: 0 },
     ]);
   });
 

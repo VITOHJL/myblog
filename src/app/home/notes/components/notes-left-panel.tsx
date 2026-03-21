@@ -7,6 +7,9 @@ type NotesLeftPanelProps = {
   orderedNotes: NotePost[];
   selectedPostId?: string;
   onPostSelect: (postId: string) => void;
+  enterKey?: number;
+  isActive?: boolean;
+  animate?: boolean;
 };
 
 export function NotesLeftPanel({
@@ -14,25 +17,47 @@ export function NotesLeftPanel({
   orderedNotes,
   selectedPostId,
   onPostSelect,
+  enterKey = 0,
+  isActive = false,
+  animate = false,
 }: NotesLeftPanelProps) {
   return (
-    <aside className="flex h-full flex-col pb-8 pl-2 pr-4 pt-[12vh]">
-      <p className="text-xs font-semibold tracking-[0.18em] text-slate-500">文章</p>
-      <div ref={notesListRef} className="mt-4 min-h-0 flex-1 space-y-1.5 overflow-y-auto pr-1">
-        {orderedNotes.map((post) => {
+    <aside
+      data-notes-left-panel
+      className="flex h-full min-h-0 flex-col pb-16 pl-[6vh] pr-[2vh] pt-[6vh]"
+    >
+      <p className="text-2xl font-semibold tracking-[0.18em] text-slate-500">文章</p>
+      <div className="relative mt-6 min-h-0 flex-1">
+        {/*底部渐隐：提示可滚动 */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-6 bg-linear-to-t from-white/90 to-transparent" />
+
+        <div ref={notesListRef} className="hide-scrollbar h-full space-y-2 overflow-y-auto pr-1">
+        {orderedNotes.map((post, index) => {
           const active = selectedPostId === post.id;
+          const delayIndex = Math.min(index, 8);
           return (
             <button
-              key={post.id}
+              key={animate && isActive ? `${enterKey}-${post.id}` : post.id}
               type="button"
               onClick={() => onPostSelect(post.id)}
-              className={`w-full rounded-xl px-3 py-2 text-left transition ${
+              className={`group w-full px-6 py-2 text-left transition ${
                 active
-                  ? "bg-white/80 text-slate-900 shadow-sm"
-                  : "text-slate-600 hover:bg-white/55 hover:text-slate-900"
+                  ? "text-sky-700"
+                  : "text-slate-600 hover:text-sky-700"
+              } ${
+                isActive
+                  ? animate
+                    ? "notes-list-item-prep notes-list-item-enter"
+                    : ""
+                  : "opacity-0"
               }`}
+              style={animate && isActive ? { animationDelay: `${delayIndex * 105}ms` } : undefined}
             >
-              <div className="flex items-center gap-2 text-[10px] tracking-[0.08em] text-slate-500">
+              <div
+                className={`flex items-center gap-2 text-[10px] tracking-[0.08em] ${
+                  active ? "text-sky-600" : "text-slate-500 group-hover:text-sky-600"
+                }`}
+              >
                 <span>{formatDateLabel(post.date)}</span>
                 {post.pinned ? (
                   <span className="rounded-full bg-sky-100 px-1.5 py-0.5 text-[9px] text-sky-700">
@@ -40,10 +65,19 @@ export function NotesLeftPanel({
                   </span>
                 ) : null}
               </div>
-              <p className="mt-1 text-xs leading-relaxed">{post.title}</p>
+              <p
+                className={`relative mt-1 truncate pb-1 text-xs leading-relaxed after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:origin-left after:scale-x-0 after:bg-sky-500 after:transition-transform after:duration-500 after:ease-out ${
+                  active
+                    ? "after:scale-x-100"
+                    : "after:bg-sky-400 after:group-hover:scale-x-100"
+                }`}
+              >
+                {post.title}
+              </p>
             </button>
           );
         })}
+      </div>
       </div>
     </aside>
   );

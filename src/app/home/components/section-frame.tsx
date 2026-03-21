@@ -5,13 +5,21 @@ type SectionFrameProps = {
   id: SectionId;
   leftPanel?: ReactNode;
   rightPanel?: ReactNode;
+  background?: ReactNode;
   children: ReactNode;
 };
 
-export function SectionFrame({ id, leftPanel, rightPanel, children }: SectionFrameProps) {
+export function SectionFrame({
+  id,
+  leftPanel,
+  rightPanel,
+  background,
+  children,
+}: SectionFrameProps) {
   return (
-    <section id={id} className="h-full w-full snap-start snap-always bg-transparent">
-      <div className="flex h-full w-full">
+    <section id={id} className="relative h-full w-full snap-start snap-always bg-transparent">
+      {background ? <div className="absolute inset-0 z-0">{background}</div> : null}
+      <div className="relative z-10 flex h-full w-full">
         <div className="hidden w-1/5 flex-shrink-0 md:block">
           {leftPanel ?? (
             <div className="pt-[12vh]">

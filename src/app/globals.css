@@ -16,6 +16,239 @@ body {
   @apply bg-white text-[color:var(--foreground)] antialiased;
 }
 
+.global-hero-video {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 6;
+  transition: opacity 420ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.hero-video {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.06);
+  filter: saturate(0.75) contrast(0.9) brightness(1.0);
+  opacity: 0.95;
+  pointer-events: none;
+}
+
+.hero-video-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(2, 6, 23, 0.8) 0%,
+    rgba(2, 6, 23, 0.55) 48%,
+    rgba(2, 6, 23, 0.62) 100%
+  );
+}
+
+.hero-video-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 20%, rgba(56, 189, 248, 0.16) 0%, transparent 55%),
+    radial-gradient(circle at 70% 70%, rgba(232, 121, 249, 0.12) 0%, transparent 58%);
+}
+
+body.hero-video-on header {
+  border-bottom-color: rgba(255, 255, 255, 0.12);
+  background: rgba(2, 6, 23, 0.22);
+}
+
+body.hero-video-on header span,
+body.hero-video-on header a {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+body.hero-video-on header a.nav-link-active {
+  color: rgb(56, 189, 248);
+}
+
+body.hero-video-on header a:hover {
+  color: rgba(255, 255, 255, 1);
+}
+
+body.hero-video-on .global-ambient {
+  opacity: 0;
+}
+
+.font-poem {
+  font-family: var(--font-poem), ui-serif, "Songti SC", "STSong", "SimSun", serif;
+}
+
+.social-link {
+  position: relative;
+  overflow: hidden;
+  transform: translateZ(0);
+}
+
+/* icon-only 圆形入口（不带条框） */
+.social-orb {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+}
+
+/* stalux: socialMedia.astro + socialLinks.module.css 的等价实现 */
+.stalux-social-links {
+  margin-top: 0.5rem;
+}
+
+.stalux-social-links ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+  padding: 0;
+  margin: 0;
+}
+
+.stalux-social-links li {
+  font-size: large;
+  width: 2.5em;
+  height: 2.5em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.7);
+  box-sizing: border-box;
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow: 0 10px 25px -18px rgba(15, 23, 42, 0.35);
+}
+
+.stalux-social-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: rgba(15, 23, 42, 0.78);
+  text-decoration: none;
+}
+
+.stalux-social-links a:hover {
+  color: rgba(2, 132, 199, 0.95);
+}
+
+.stalux-icon-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stalux-custom-icon {
+  font-size: 0.85em;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+/* hover 时的“扫光” + 渐变描边感（类似 stalux 的精致入口感） */
+.social-link::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 0.9rem;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.35), rgba(232, 121, 249, 0.22), rgba(56, 189, 248, 0.18));
+  opacity: 0;
+  transition: opacity 280ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  pointer-events: none;
+}
+
+.social-link::after {
+  content: "";
+  position: absolute;
+  top: -40%;
+  left: -60%;
+  width: 45%;
+  height: 180%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.22), transparent);
+  transform: rotate(18deg);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.social-link:hover {
+  transform: translate3d(0, -1px, 0);
+}
+
+.social-link:hover::before {
+  opacity: 1;
+}
+
+.social-link:hover::after {
+  opacity: 1;
+  animation: social-shine 720ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.social-icon {
+  transition: transform 280ms cubic-bezier(0.2, 0.8, 0.2, 1), color 280ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 280ms cubic-bezier(0.2, 0.8, 0.2, 1), background-color 280ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.social-link:hover .social-icon {
+  transform: translate3d(0, -0.5px, 0) scale(1.02);
+  color: rgb(2, 132, 199);
+  border-color: rgba(56, 189, 248, 0.35);
+  background-color: rgba(255, 255, 255, 0.78);
+}
+
+@keyframes social-shine {
+  0% {
+    transform: translateX(0) rotate(18deg);
+  }
+  100% {
+    transform: translateX(360%) rotate(18deg);
+  }
+}
+
+/* “跳起来翻滚”动效：默认轻微漂浮，hover/聚焦时弹起并翻滚一圈 */
+.float-roll {
+  will-change: transform;
+  animation: float-bob 5.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+.float-roll:hover,
+.float-roll:focus-visible {
+  /* 随笔/正文里的图片悬浮不应该旋转；这里改为仅“轻微漂浮” */
+  animation: float-bob 3.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+@keyframes float-bob {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -3px, 0);
+  }
+}
+
+/* 旋转动效已禁用（之前用于装饰图层 hover 翻滚）。如需恢复，建议单独创建新 class。 */
+
+@media (prefers-reduced-motion: reduce) {
+  .global-hero-video,
+  .hero-video {
+    display: none;
+  }
+
+  .social-link,
+  .social-link::before,
+  .social-link::after,
+  .social-icon,
+  .float-roll {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
 .global-ambient {
   pointer-events: none;
   position: fixed;
@@ -63,6 +296,14 @@ body {
   display: none;
 }
 
+.hide-scrollbar {
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 .section-bg-enter-up {
   animation: section-bg-enter-up 420ms cubic-bezier(0.55, 0, 0.45, 1) both;
 }
@@ -77,6 +318,26 @@ body {
 
 .section-content-enter-down {
   animation: section-content-enter-down 660ms cubic-bezier(0.45, 0.5, 0.85, 1) both;
+}
+
+.notes-list-item-enter {
+  animation: notes-list-item-enter 1320ms cubic-bezier(0.65, 0, 0.35, 1) both;
+  will-change: transform, opacity;
+}
+
+.notes-list-item-prep {
+  opacity: 0;
+  transform: translate3d(-18px, 0, 0);
+}
+
+.notes-category-item-enter {
+  animation: notes-category-item-enter 1320ms cubic-bezier(0.65, 0, 0.35, 1) both;
+  will-change: transform, opacity;
+}
+
+.notes-category-item-prep {
+  opacity: 0;
+  transform: translate3d(18px, 0, 0);
 }
 
 @keyframes ambient-orb {
@@ -134,6 +395,28 @@ body {
   100% {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes notes-list-item-enter {
+  0% {
+    opacity: 0;
+    transform: translate3d(-18px, 0, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes notes-category-item-enter {
+  0% {
+    opacity: 0;
+    transform: translate3d(18px, 0, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
   }
 }
 

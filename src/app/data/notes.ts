@@ -1,4 +1,12 @@
-export type NoteCategory = "技术" | "情感" | "随想";
+export type NoteCategory =
+  | "技术"
+  | "工程"
+  | "设计"
+  | "产品"
+  | "读书"
+  | "随想"
+  | "情感"
+  | "生活";
 
 export type NotePost = {
   id: string;
@@ -14,7 +22,7 @@ export type NotePost = {
   content: string[];
 };
 
-export const NOTE_POSTS: NotePost[] = [
+const BASE_POSTS: NotePost[] = [
   {
     id: "engineering-scroll-experience",
     serial: 100594,
@@ -97,6 +105,60 @@ export const NOTE_POSTS: NotePost[] = [
     ],
   },
 ];
+
+function pad2(value: number) {
+  return String(value).padStart(2, "0");
+}
+
+function shiftDate(base: string, daysToShift: number) {
+  const date = new Date(`${base}T00:00:00`);
+  date.setDate(date.getDate() - daysToShift);
+  const year = date.getFullYear();
+  const month = pad2(date.getMonth() + 1);
+  const day = pad2(date.getDate());
+  return `${year}-${month}-${day}`;
+}
+
+function buildDemoPosts(posts: NotePost[], targetCount: number): NotePost[] {
+  if (posts.length >= targetCount) {
+    return posts;
+  }
+
+  const result: NotePost[] = [...posts];
+  const seedDate = posts[0]?.date ?? "2026-03-09";
+  const categories: NoteCategory[] = [
+    "技术",
+    "工程",
+    "设计",
+    "产品",
+    "读书",
+    "随想",
+    "情感",
+    "生活",
+  ];
+
+  for (let i = posts.length; i < targetCount; i += 1) {
+    const base = posts[i % posts.length];
+    const serial = 100000 + (targetCount - i);
+    const category = categories[i % categories.length];
+
+    result.push({
+      ...base,
+      id: `${base.id}-demo-${i}`,
+      serial,
+      category,
+      pinned: i % 11 === 0,
+      date: shiftDate(seedDate, i),
+      title: `${base.title} · Demo ${i}`,
+      excerpt: `${base.excerpt}（用于演示长列表滚动效果）`,
+    });
+  }
+
+  return result;
+}
+
+// 开发演示：把列表拉长，方便调“文章/分类很多时”的滚动与选中态。
+export const NOTE_POSTS: NotePost[] = buildDemoPosts(BASE_POSTS, 60);
 
 export function getNoteHref(serial: number) {
   return `/notes/${serial}`;

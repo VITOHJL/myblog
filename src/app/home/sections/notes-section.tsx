@@ -10,6 +10,9 @@ import type { CategoryItem, NoteCategoryFilter } from "../types";
 type NotesSectionProps = {
   animationClass: string;
   notesListRef: RefObject<HTMLDivElement | null>;
+  notesEnterKey: number;
+  isActive: boolean;
+  animateLists: boolean;
   categoryItems: CategoryItem[];
   activeCategory: NoteCategoryFilter;
   onCategoryChange: (category: NoteCategoryFilter) => void;
@@ -21,6 +24,9 @@ type NotesSectionProps = {
 export function NotesSection({
   animationClass,
   notesListRef,
+  notesEnterKey,
+  isActive,
+  animateLists,
   categoryItems,
   activeCategory,
   onCategoryChange,
@@ -37,6 +43,9 @@ export function NotesSection({
           orderedNotes={orderedNotes}
           selectedPostId={selectedPost?.id}
           onPostSelect={onPostSelect}
+          enterKey={notesEnterKey}
+          isActive={isActive}
+          animate={animateLists}
         />
       }
       rightPanel={
@@ -44,6 +53,8 @@ export function NotesSection({
           categoryItems={categoryItems}
           activeCategory={activeCategory}
           onCategoryChange={onCategoryChange}
+          enterKey={notesEnterKey}
+          isActive={isActive}
         />
       }
     >

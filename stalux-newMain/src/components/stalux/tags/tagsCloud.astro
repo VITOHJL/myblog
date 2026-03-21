@@ -1,0 +1,25 @@
+---
+import { getTagCountList } from "@utils/collections-stats";
+import styles from "@styles/components/tags/tagsCloud.module.css";
+
+const tagList = await getTagCountList();
+---
+
+<div class={styles.tagsCloud}>
+    {
+        tagList.length > 0 ? (
+            tagList.map(({ name, count }) => (
+                <a
+                    href={`/tags/${name}/`}
+                    class={styles.tagItem}
+                    data-count={count}
+                >
+                    <div class={styles.tagName}>{name}</div>
+                    <div class={styles.tagCount}>{count}</div>
+                </a>
+            ))
+        ) : (
+            <div class={styles.noTags}>暂无标签</div>
+        )
+    }
+</div>

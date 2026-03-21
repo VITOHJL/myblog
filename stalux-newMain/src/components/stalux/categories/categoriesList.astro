@@ -1,0 +1,17 @@
+---
+import { getCategoryCountList } from "@utils/collections-stats";
+import styles from "@styles/components/categories/categoriesList.module.css";
+import CategoriesCard from "@components/stalux/categories/categoriesCard.astro";
+
+const categoryList = await getCategoryCountList();
+---
+
+<ul class={styles.categoriesList}>
+    {
+        categoryList.map((category) => (
+            <li>
+                <CategoriesCard category={category} />
+            </li>
+        ))
+    }
+</ul>

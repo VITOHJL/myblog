@@ -55,7 +55,8 @@ export default function TopNav() {
           <a
             key={item.id}
             href={item.href}
-            className={isActive ? "text-sky-600" : "hover:text-slate-900"}
+            data-active={isActive ? "true" : "false"}
+            className={`nav-link ${isActive ? "nav-link-active text-sky-600" : "hover:text-slate-900"}`}
           >
             {item.label}
           </a>
